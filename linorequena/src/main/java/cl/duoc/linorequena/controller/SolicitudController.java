@@ -12,7 +12,7 @@ import cl.duoc.linorequena.model.Solicitud;
 import cl.duoc.linorequena.service.SolicitudService;
 
 @Service
-@RequestMapping("api/solicitudes")
+@RequestMapping("api/solicitud")
 public class SolicitudController {
   
     private final SolicitudService solicitudService;
