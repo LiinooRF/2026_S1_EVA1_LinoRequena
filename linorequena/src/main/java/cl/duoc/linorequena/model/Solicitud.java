@@ -16,7 +16,9 @@ public class Solicitud {
     @NotEmpty(message = "El idSolicitud no puede estar vacía.")
     private Long idSolicitud; 
     @NotBlank(message = "El nombre del paciente no puede estar vacío.")
-    private String nombrePaciente;
+    private String nombreCompletoPaciente;
+    @NotBlank(message = "El RUT del paciente no puede estar vacío.")
+    private String rutPaciente;
     @NotNull(message = "La edad del paciente no puede ser nula.")
     private Integer edadPaciente;
     @NotBlank(message = "El género del paciente no puede estar vacío.")
