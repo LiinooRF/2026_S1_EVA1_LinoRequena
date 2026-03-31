@@ -3,8 +3,10 @@ package cl.duoc.linorequena.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import cl.duoc.linorequena.model.Solicitud;
+import org.springframework.stereotype.Repository;
 
+import cl.duoc.linorequena.model.Solicitud;
+@Repository
 public class SolicitudRepository {
 
     private List<Solicitud> solicitudes = new ArrayList<>();
@@ -39,6 +41,13 @@ public class SolicitudRepository {
     //Eliminar una solicitud por ID
     public boolean eliminarSolicitud(String idSolicitud) {
         return solicitudes.removeIf(s -> s.getIdSolicitud().equals(idSolicitud));
+    }
+//OPERACIÓN DE PROCESAMIENTO
+    //Buscar cantidad de solicitudes por fecha.
+    public int contarSolicitudesPorFecha(String fecha) {
+        return (int) solicitudes.stream()
+            .filter(s -> s.getFechaRegistroSolicitud().toString().equals(fecha))
+            .count();
     }
 }
 
