@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LinorequenaApplication<linorequena>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.duoc.linorequena.LinorequenaApplication",
+            "projectName": "linorequena",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
