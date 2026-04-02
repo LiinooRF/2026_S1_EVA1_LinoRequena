@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 public class Solicitud {
-    @NotEmpty(message = "El idSolicitud no puede estar vacía.")
+
+    @NotNull(message = "El idSolicitud no puede ser nulo.")
     private Long idSolicitud; 
     @NotBlank(message = "El nombre del paciente no puede estar vacío.")
     private String nombreCompletoPaciente;
@@ -30,5 +30,5 @@ public class Solicitud {
     @NotBlank(message = "El estado de la solicitud no puede estar vacío.")
     private String estadoSolicitud;
     @NotNull(message = "El nivel de prioridad no puede ser nulo.")
-    private Integer nivelProridadSolicitud;
+    private Integer nivelPrioridadSolicitud;
 }

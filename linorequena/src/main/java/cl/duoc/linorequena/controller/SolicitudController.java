@@ -2,17 +2,15 @@ package cl.duoc.linorequena.controller;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import cl.duoc.linorequena.model.Solicitud;
 import cl.duoc.linorequena.service.SolicitudService;
+import jakarta.validation.Valid;
 
-@Service
-@RequestMapping("api/solicitud")
+@RestController
+@RequestMapping("/api/solicitud")
 public class SolicitudController {
   
     private final SolicitudService solicitudService;
@@ -21,41 +19,61 @@ public class SolicitudController {
         this.solicitudService = solicitudService;
     }
 
-    //Consultar solicitudes ya almacenadas.
+    // Consultar solicitudes ya almacenadas
     @GetMapping
     public List<Solicitud> consultarSolicitudes() {
         return solicitudService.consultarSolicitudes();
     }
 
-    //Buscar solicitudes por algun criterio relevante en este caso el ID.
-    @GetMapping("/buscar")
-    public List<Solicitud> buscarSolicitudes(String idSolicitud) {
-        return solicitudService.buscarSolicitudes(idSolicitud);
+    // Buscar solicitudes por ID
+    @GetMapping("/buscar/{idSolicitud}")
+    public ResponseEntity<?> buscarSolicitudes(@PathVariable Long idSolicitud) {
+        List<Solicitud> solicitudes = solicitudService.buscarSolicitudes(idSolicitud);
+
+        if (solicitudes.isEmpty()) {
+            return ResponseEntity.badRequest().body("Solicitud no encontrada");
+        } else {
+            return ResponseEntity.ok(solicitudes);
+        }
     }
     
-    //Buscar cantidad de solicitudes por fecha // OPERACIÓN ESPECIAL
-    @GetMapping("/contarPorFecha")
-    public int contarSolicitudesPorFecha(String fecha) {
-        return solicitudService.contarSolicitudesPorFecha(fecha);
+    // Contar solicitudes por fecha ingresando la fecha en formato "AÑO-MES-DÍA"
+    @GetMapping("/contarPorFecha/{fecha}")
+    public ResponseEntity<Integer> contarSolicitudesPorFecha(@PathVariable String fecha) {
+        int total = solicitudService.contarSolicitudesPorFecha(fecha);
+        return ResponseEntity.ok(total);
     }
 
-    //Registrar una solicitud.
+    // Registrar una solicitud
     @PostMapping("/registrar")
-    public void agregarSolicitud(@RequestBody Solicitud nuevaSolicitud) {
+    public ResponseEntity<String> agregarSolicitud(@Valid @RequestBody Solicitud nuevaSolicitud) {
         solicitudService.agregarSolicitud(nuevaSolicitud);
+        return ResponseEntity.ok("Solicitud registrada");
     }
 
-    //modificar una solicitud con el id
-    @PostMapping("/modificar")
-    public boolean modificarSolicitud(String idSolicitud, @RequestBody Solicitud solicitudModificada) {
-        return solicitudService.modificarSolicitud(idSolicitud, solicitudModificada);
+    // Modificar una solicitud con el id
+    @PutMapping("/modificar/{idSolicitud}")
+    public ResponseEntity<String> modificarSolicitud( @PathVariable Long idSolicitud,
+            @Valid @RequestBody Solicitud solicitudModificada) {
+
+        boolean modificado = solicitudService.modificarSolicitud(idSolicitud, solicitudModificada);
+
+        if (modificado) {
+            return ResponseEntity.ok("Solicitud modificada");
+        } else {
+            return ResponseEntity.badRequest().body("Solicitud no encontrada");
+        }
     }
 
-    //Eliminar una solicitud por ID
-    @PostMapping("/eliminar")   
-    public boolean eliminarSolicitud(String idSolicitud) {
-        return solicitudService.eliminarSolicitud(idSolicitud);
+    // Eliminar una solicitud por ID
+    @DeleteMapping("/eliminar/{idSolicitud}")
+    public ResponseEntity<String> eliminarSolicitud(@PathVariable Long idSolicitud) {
+        boolean eliminado = solicitudService.eliminarSolicitud(idSolicitud);
+
+        if (eliminado) {
+            return ResponseEntity.ok("Solicitud eliminada");
+        } else {
+            return ResponseEntity.badRequest().body("Solicitud no encontrada");
+        }
     }
-
-
 }
